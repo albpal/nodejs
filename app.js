@@ -14,13 +14,13 @@ const influx = new Influx.InfluxDB({
     {
       measurement: 'cryptocurrencies_rates',
       fields: {
-        exchange: Influx.FieldType.STRING,
         rate_float_usd: Influx.FieldType.FLOAT,
         rate_float_eur: Influx.FieldType.FLOAT,
         amount_owned: Influx.FieldType.FLOAT,
 	total_expended: Influx.FieldType.FLOAT
       },
       tags: [
+	'exchange',
         'currency'
       ]
     }
@@ -47,8 +47,8 @@ app.get('/', function (req, result) {
 			influx.writePoints([
 			      {
 				        measurement: 'cryptocurrencies_rates',
-				        tags: { currency: 'BTC' },
-				        fields: { exchange: 'coinbase', rate_float_usd: rate_usd, rate_float_eur: rate_eur, amount_owned: bitcoins, total_expended: expended },
+				        tags: { exchange: 'coinbase', currency: 'BTC' },
+				        fields: { rate_float_usd: rate_usd, rate_float_eur: rate_eur, amount_owned: bitcoins, total_expended: expended },
 			      }
 			 ]).catch(err => {
 			      console.error(`Error saving data to InfluxDB! ${err.stack}`)
